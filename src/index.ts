@@ -124,6 +124,20 @@ async function bootstrap() {
     console.log(`[Express] 🛡️ Admin Dashboard (Protected): http://localhost:${ENV.PORT}/`);
     console.log(`[Express] ⚡ Client Gateway Endpoint: http://localhost:${ENV.PORT}/v1/messages/send`);
     console.log(`[Express] 📖 Client Docs Endpoint: http://localhost:${ENV.PORT}/v1/docs`);
+
+    // Layanan Keep-Alive (Self-Ping agar Render Free tidak pernah tertidur/spin-down)
+    if (ENV.KEEP_ALIVE && ENV.APP_URL) {
+      const pingUrl = `${ENV.APP_URL.replace(/\/$/, '')}/v1/docs`;
+      console.log(`[KeepAlive] ⏱️ Mengaktifkan self-ping otomatis setiap 10 menit ke: ${pingUrl}`);
+      setInterval(async () => {
+        try {
+          const res = await fetch(pingUrl);
+          console.log(`[KeepAlive] 💓 Self-ping berhasil (Status: ${res.status}) pada ${new Date().toISOString()}`);
+        } catch (err: any) {
+          console.warn(`[KeepAlive] ⚠️ Gagal self-ping: ${err.message}`);
+        }
+      }, 10 * 60 * 1000);
+    }
   });
 
   // 5. Hubungkan ke Socket WhatsApp

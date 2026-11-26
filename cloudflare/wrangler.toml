@@ -6,5 +6,5 @@ compatibility_date = "2024-09-23"
 [vars]
 SUPABASE_URL = "https://your-project.supabase.co"
 SUPABASE_KEY = "your-supabase-service-role-key"
-ENGINE_URL = "https://your-huggingface-space.hf.space"
-INTERNAL_ENGINE_SECRET = "sec_hf_internal_default_key"
+ENGINE_URL = "https://wagateway-enterprise.onrender.com"
+INTERNAL_ENGINE_SECRET = "sec_render_internal_default_key"

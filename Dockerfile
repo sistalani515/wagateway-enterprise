@@ -26,12 +26,13 @@ RUN npm install --omit=dev
 
 COPY --from=builder /app/dist ./dist
 
-# node:20-slim sudah memiliki user 'node' dengan UID 1000 (standar Hugging Face Spaces)
+# node:20-slim sudah memiliki user 'node' dengan UID 1000
 RUN mkdir -p /app/sessions && \
     chown -R node:node /app
 
 USER node
 
-EXPOSE 7860
+# Expose port untuk Local Docker (7860) dan Render.com (10000 / $PORT)
+EXPOSE 7860 10000
 
 CMD ["node", "dist/index.js"]

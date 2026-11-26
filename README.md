@@ -9,7 +9,9 @@ pinned: false
 ---
 
 # WAGateway Pro Enterprise [Clean Architecture]
-> Multi-Tenant WhatsApp Gateway, Admin SaaS Control Dashboard, Baileys Multi-Device Engine with **Hugging Face Spaces**, **Cloudflare Workers**, and **Supabase Cloud Persistence**.
+> Multi-Tenant WhatsApp Gateway, Admin SaaS Control Dashboard, Baileys Multi-Device Engine with **Render.com / Docker**, **Cloudflare Workers**, and **Supabase Cloud Persistence**.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 
 ---
 
@@ -22,13 +24,14 @@ pinned: false
 [ Cloudflare Workers API Gateway ] ────(Cek Kuota, Expired & API Key)────► [ Supabase Cloud PostgreSQL ]
           │ (Internal Proxy via x-engine-secret)                                  ▲
           ▼                                                                       │ (Sesi Baileys Auth Store)
-[ Hugging Face Spaces Engine ] (Baileys WebSocket Node) ──────────────────────────┘
+[ Render.com Free Docker Engine ] (Baileys WebSocket Node) ───────────────────────┘
 ```
 
-1. **Hugging Face Spaces (Baileys Engine Node)**:
-   - Menjalankan container Docker non-root (`user: node`, port `7860`).
-   - Menyediakan socket koneksi persisten WhatsApp Multi-Device.
-   - **Zero Data Loss**: Sesi WhatsApp (`creds.json` & signal keys) otomatis tersimpan dan disinkronkan ke tabel `baileys_auth_store` di **Supabase**. Meskipun instance HF Spaces tertidur (sleep) atau di-restart, bot langsung menyambung kembali tanpa perlu scan QR ulang.
+1. **Render.com (Baileys Engine Node - 100% Free Docker)**:
+   - Menjalankan container Docker non-root pada port `10000` (atau `7860`).
+   - Menyediakan socket koneksi persisten WhatsApp Multi-Device murni (<90MB RAM).
+   - **Zero Data Loss**: Sesi WhatsApp (`creds.json` & signal keys) otomatis tersimpan dan disinkronkan ke tabel `baileys_auth_store` di **Supabase**. Meskipun instance di-restart atau di-redeploy, bot langsung menyambung kembali tanpa perlu scan QR ulang.
+   - **Stay Awake 24/7**: Dilengkapi auto self-ping terintegrasi setiap 10 menit ke `/v1/docs` sehingga kontainer Render Free tidak akan pernah tertidur (*spin down*).
 2. **Cloudflare Worker (Edge API Gateway)**:
    - Validasi `x-api-key`, verifikasi langganan aktif, dan deduksi kuota secara atomik.
    - Meneruskan request pengiriman pesan secara aman ke node engine via header `x-engine-secret`.

@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: wagateway-enterprise
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /v1/docs
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_DIR
+        value: /app/sessions
+      - key: SESSION_ID
+        value: engine-primary
+      - key: KEEP_ALIVE
+        value: "true"
+      # Isikan SUPABASE_URL dan SUPABASE_KEY di Dashboard Render (atau Environment Group)
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: INTERNAL_ENGINE_SECRET
+        sync: false

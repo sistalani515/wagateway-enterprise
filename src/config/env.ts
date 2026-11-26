@@ -13,6 +13,10 @@ export const ENV = {
   SUPABASE_URL: process.env.SUPABASE_URL || '',
   SUPABASE_KEY: process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '',
   
-  // Internal Engine Authentication (for HF Spaces / Cloudflare communication)
-  INTERNAL_ENGINE_SECRET: process.env.INTERNAL_ENGINE_SECRET || 'sec_hf_internal_default_key'
+  // Internal Engine Authentication (for Render / Cloudflare communication)
+  INTERNAL_ENGINE_SECRET: process.env.INTERNAL_ENGINE_SECRET || 'sec_render_internal_default_key',
+
+  // Render & Cloud Stay-Awake / Self-Ping Service
+  APP_URL: process.env.RENDER_EXTERNAL_URL || process.env.APP_URL || '',
+  KEEP_ALIVE: process.env.KEEP_ALIVE !== 'false'
 };
