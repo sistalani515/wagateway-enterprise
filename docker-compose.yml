@@ -1,0 +1,17 @@
+services:
+  wabot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wabot-cleanarch
+    restart: unless-stopped
+    ports:
+      - "7860:7860"
+    environment:
+      - PORT=7860
+      - BOT_NAME=WABot CleanArch
+      - COMMAND_PREFIX=!
+      - SESSION_DIR=/app/sessions
+    volumes:
+      # Mount folder sessions di PC host agar sesi login WhatsApp tersimpan permanen
+      - ./sessions:/app/sessions
